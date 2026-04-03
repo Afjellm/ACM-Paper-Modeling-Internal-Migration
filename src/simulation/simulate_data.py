@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pandas as pd
 from src.data_loading.load_model_input import load_model_input_full
+from src.model_artifacts import build_model_artifact_config
 from src.simulation.gravity.load_models import discover_age_group_models, load_all_models
 from src.simulation.gravity.simulate import simulate_data_with_gravity
 import subprocess
@@ -12,22 +13,24 @@ AREA_CODES = [314,502]
 
 YEARS_TO_SIMULATE = range(2018, 2024)
 
-GRAVITY_MODEL = "gravity_prev_year_age_pop_rows_1000"
-GRAVITY_FIT_YEAR = "2019_2020_2021_2022"
+MODEL_ARTIFACTS = build_model_artifact_config()
+
+GRAVITY_MODEL = MODEL_ARTIFACTS["gravity"]["model_name"]
+GRAVITY_FIT_YEAR = MODEL_ARTIFACTS["gravity"]["fit_year"]
 GRAVITY_MODEL_NEXT_YEAR = True
 
-ENSEMBLE_MODEL = "autogluon_amount_rows_1000"
-ENSEMBLE_FIT_YEAR = "2019_2020_2021_2022"
+ENSEMBLE_MODEL = MODEL_ARTIFACTS["autogluon"]["model_name"]
+ENSEMBLE_FIT_YEAR = MODEL_ARTIFACTS["autogluon"]["fit_year"]
 ENSEMBLE_MODEL_NEXT_YEAR = False
 ENSEMBLE_RELATIVE = False
 
-XGBOOST_MODEL = "xboost_model_s1_normalized_cols_amount_next_year_rows_1000"
-XGBOOST_FIT_YEAR = "2020_2021_2022"
+XGBOOST_MODEL = MODEL_ARTIFACTS["xgboost"]["model_name"]
+XGBOOST_FIT_YEAR = MODEL_ARTIFACTS["xgboost"]["fit_year"]
 XGBOOST_NEXT_YEAR = True
 XGBOOST_RELATIVE = True
 
-CATBOOST_MODEL = "caboost_s1_normalized_cols_amount_rows_1000"
-CATBOOST_FIT_YEAR = "2020_2021_2022_2023"
+CATBOOST_MODEL = MODEL_ARTIFACTS["constrained_catboost"]["model_name"]
+CATBOOST_FIT_YEAR = MODEL_ARTIFACTS["constrained_catboost"]["fit_year"]
 CATBOOST_NEXT_YEAR = False
 CATBOOST_RELATIVE = True
 

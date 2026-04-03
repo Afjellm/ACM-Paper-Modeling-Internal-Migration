@@ -5,9 +5,16 @@ SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 PROJECT_ROOT="$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)"
 MODEL_DIR="$PROJECT_ROOT/src/analysis"
 VENV_PYTHON="$MODEL_DIR/.venv/bin/python"
+SETTINGS_FILE="$SCRIPT_DIR/settings.env"
 
 export UV_CACHE_DIR="$PROJECT_ROOT/.uv-cache"
 export PYTHONPATH="$PROJECT_ROOT"
+
+if [ -f "$SETTINGS_FILE" ]; then
+  set -a
+  . "$SETTINGS_FILE"
+  set +a
+fi
 
 echo "[INFO] Setting up environment for $MODEL_DIR"
 (

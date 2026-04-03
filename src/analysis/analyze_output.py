@@ -6,6 +6,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from src.model_artifacts import build_model_artifact_config
+
 
 VALIDATION_PREDICT_YEARS: dict[str, set[int]] = {
     "2018_2019_2020_2021": {2022, 2023},
@@ -16,27 +18,6 @@ VALIDATION_PREDICT_YEARS: dict[str, set[int]] = {
     "2020_2021_2022": {2019, 2023},
     "2021_2022_2023": {2019, 2020},
 }
-
-# Configure the four model families here.
-MODEL_CONFIGS: dict[str, dict[str, str]] = {
-    "xgboost": {
-        "folder": r"models/output/xgboost_output/xboost_model_s1_normalized_cols_amount_next_year_rows_1000",
-        "fit_year": "2020_2021_2022",
-    },
-    "constrained_catboost": {
-        "folder": r"models/output/catboost_output/caboost_s1_normalized_cols_amount_rows_1000",
-        "fit_year": "2020_2021_2022_2023",
-    },
-    "autogluon": {
-        "folder": r"models/output/autogluon_output/autogluon_amount_rows_1000",
-        "fit_year": "2019_2020_2021_2022",
-    },
-    "gravity": {
-        "folder": r"models/output/gravity_output/gravity_prev_year_age_pop_rows_1000",
-        "fit_year": "2019_2020_2021_2022",
-    },
-}
-
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -456,12 +437,13 @@ def build_report(results_df: pd.DataFrame, cpc_image_path: Path) -> str:
 
 def main() -> None:
     args = parse_args()
+    model_configs = build_model_artifact_config()
 
     output_path = Path(args.output).resolve()
     output_path.parent.mkdir(parents=True, exist_ok=True)
     cpc_plot_path = output_path.with_name(f"{output_path.stem}_cpc.svg")
 
-    results = [analyze_model(model_name, config) for model_name, config in MODEL_CONFIGS.items()]
+    results = [analyze_model(model_name, config) for model_name, config in model_configs.items()]
     cpc_frames = [result.pop("cpc_by_age") for result in results]
     results_df = pd.DataFrame(results)
 

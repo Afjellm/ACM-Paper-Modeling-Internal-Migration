@@ -83,7 +83,7 @@ All runner scripts live in [`run/`](./run). They do two things for you:
 
 ### Step 1: Configure `run/settings.env`
 
-Before running training scripts, review [`run/settings.env`](./run/settings.env):
+Before running the training, analysis, or simulation scripts, review [`run/settings.env`](./run/settings.env):
 
 For fast execution to simply run the models end to end the following settings can be used:
 
@@ -93,7 +93,13 @@ TIME_LIMIT=120
 ```
 
 - `ROWS_PER_AGE_GROUP` limits how many rows are loaded per age group. Set it to `NONE` to use the full dataset.
+  The same value is also used to derive the expected model artifact names for `run_analysis` and
+  `run_simulate_data`. For example, `ROWS_PER_AGE_GROUP=1000` maps to model names ending in `rows_1000`, while
+  `ROWS_PER_AGE_GROUP=NONE` maps to model names ending in `full`.
 - `TIME_LIMIT` is used by the AutoML training script and is interpreted in seconds.
+
+If you change `ROWS_PER_AGE_GROUP`, retrain all four model families with the same setting before running analysis or
+simulation. Otherwise those scripts will look for a different model folder name than the one written during training.
 
 To numerically reproduce the paper results the following settings are required:
 
@@ -107,13 +113,15 @@ TIME_LIMIT=14400
 From the repository root, use the launchers in [`run/`](./run).
 
 The scripts ``run_analysis`` and ``run_simulate_data`` are only runnable after all 4 model outputs have been generated.
+They also read [`run/settings.env`](./run/settings.env), so the configured `ROWS_PER_AGE_GROUP` must match the training
+run whose artifacts you want to analyze or simulate.
 
 #### Windows
 
 ```powershell
 .\run\run_automl.bat
 .\run\run_constrained_xgboost.bat
-.\run\run_catboost.bat
+.\run\run_constrained_catboost.bat
 .\run\run_gravity.bat
 .\run\run_analysis.bat
 .\run\run_simulate_data.bat
@@ -163,7 +171,8 @@ Training outputs are written under `models/output/`, for example:
 - `models/output/catboost_output/`
 - `models/output/gravity_output/`
 
-The comparison script reads these artifacts and generates the model comparison report.
+The comparison script reads these artifacts and generates the model comparison report. The exact artifact name it reads
+is derived automatically from [`run/settings.env`](./run/settings.env).
 
 ### Why are the results not 100% identical
 

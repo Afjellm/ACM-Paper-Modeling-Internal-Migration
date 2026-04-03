@@ -7,6 +7,14 @@ set "MODEL_DIR=%PROJECT_ROOT%\src\analysis"
 set "VENV_PYTHON=%MODEL_DIR%\.venv\Scripts\python.exe"
 set "UV_CACHE_DIR=%PROJECT_ROOT%\.uv-cache"
 set "PYTHONPATH=%PROJECT_ROOT%"
+set "SETTINGS_FILE=%SCRIPT_DIR%settings.env"
+set "ROWS_PER_AGE_GROUP=NONE"
+
+if exist "%SETTINGS_FILE%" (
+    for /f "usebackq tokens=1,* delims==" %%A in (`findstr /r /v /c:"^#" /c:"^$" "%SETTINGS_FILE%"`) do (
+        set "%%A=%%B"
+    )
+)
 
 echo [INFO] Setting up environment for %MODEL_DIR%
 pushd "%MODEL_DIR%"
