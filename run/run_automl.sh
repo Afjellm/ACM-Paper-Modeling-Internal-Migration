@@ -1,0 +1,33 @@
+#!/usr/bin/env sh
+set -eu
+
+SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+PROJECT_ROOT="$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)"
+MODEL_DIR="$PROJECT_ROOT/src/automl"
+VENV_PYTHON="$MODEL_DIR/.venv/bin/python"
+SETTINGS_FILE="$SCRIPT_DIR/settings.env"
+
+export UV_CACHE_DIR="$PROJECT_ROOT/.uv-cache"
+export PYTHONPATH="$PROJECT_ROOT"
+
+if [ -f "$SETTINGS_FILE" ]; then
+  set -a
+  . "$SETTINGS_FILE"
+  set +a
+fi
+
+echo "[INFO] Setting up environment for $MODEL_DIR"
+(
+  cd "$MODEL_DIR"
+  uv sync
+)
+
+if [ ! -x "$VENV_PYTHON" ]; then
+  echo "[ERROR] Virtual environment Python not found at $VENV_PYTHON" >&2
+  exit 1
+fi
+
+echo "[INFO] Running model"
+cd "$PROJECT_ROOT"
+"$VENV_PYTHON" -m src.automl.autogluon_training "$@"
+
