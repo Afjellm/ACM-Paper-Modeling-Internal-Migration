@@ -12,6 +12,11 @@ Authors:
 - Niki Popper - nikolas.popper@tuwien.ac.at
 - Martin Bicher - martin.bicher@tuwien.ac.at
 
+# Using pretrained models
+
+Go to [`pretrained/`](./pretrained) to see guides on how to use the pretrained models
+
+# Retraining
 
 ## Introduction
 
@@ -31,6 +36,7 @@ paper.
 - [`src/simulation/`](./src/simulation) contains the code and scenario inputs for simulation runs.
 - [`models/`](./models) is expected to contain trained model artifacts after local training runs.
 - [`intermediate/`](./intermediate) stores temporary files created during simulation runs.
+- [`pretrained/`](./pretrained) Guide on how to use and reproduce results using pretrained models
 
 ## Installation
 
@@ -140,39 +146,7 @@ run whose artifacts you want to analyze or simulate.
 
 ## I want to reproduce the paper results
 
-Train the models first, then run the analysis script.
-
-Expected duration on full data:
-- gravity model fitting: 1h
-- xgboost model training: 2h
-- catboost model training: 3h
-- autogluon model training: 4h
-- simulation of scenarios: 20m
-
-Specs of the author that ran experiments:
-
-RAM: 64 GB <br />
-CPU: Intel64 Family 6 Model 183 Stepping 1 GenuineIntel ~3500 Mhz <br />
-OS Name: Microsoft Windows 11 <br />
-OS Version: 10.0.26200 <br />
-
-
-Recommended order:
-
-1. configure [`run/settings.env`](./run/settings.env)
-2. run AutoML, constrained XGBoost, constrained CatBoost, and gravity training
-3. run the analysis script to generate the comparison report
-4. run the simulation script to generate data for the simulation plots
-
-Training outputs are written under `models/output/`, for example:
-
-- `models/output/autogluon_output/`
-- `models/output/xgboost_output/`
-- `models/output/catboost_output/`
-- `models/output/gravity_output/`
-
-The comparison script reads these artifacts and generates the model comparison report. The exact artifact name it reads
-is derived automatically from [`run/settings.env`](./run/settings.env).
+Visit [`pretrained/`](./pretrained) to see on how to reproduce the main paper results
 
 ### Why are the results not 100% identical
 
@@ -183,16 +157,16 @@ correctly predicted districts also only slightly differs:
 
 | model     | mare_in_repo | mare_in_paper (rounded) |
 |-----------|--------------|-------------------------|
-| xgboost   | 0.139802     | 0.14                    |
-| catboost  | 0.262517     | 0.25                    |
-| autogluon | 0.089937     | 0.09                    |
-| gravity   | 0.266472     | 0.25                    |
+| xgboost   | 0.1244       | 0.14                    |
+| catboost  | 0.2799       | 0.25                    |
+| autogluon | 0.0743       | 0.09                    |
+| gravity   | 0.2664       | 0.25                    |
 
 | model     | correctly predicted (S_agree) repo | correctly predicted (paper) |
 |-----------|------------------------------------|-----------------------------|
-| xgboost   | 88/116                             | 90/116                      |
-| catboost  | 95/116                             | 98/116                      |
-| autogluon | 96/116                             | 97/116                      |
+| xgboost   | 94/116                             | 90/116                      |
+| catboost  | 94/116                             | 98/116                      |
+| autogluon | 94/116                             | 97/116                      |
 | gravity   | 88/116                             | 86/116                      |
 
 Reported R2 scores also only differ by at max 0.02. 

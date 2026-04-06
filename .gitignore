@@ -214,3 +214,5 @@ model_comparison_analysis.md
 model_comparison_analysis_cpc.svg
 src/simulation/output/*
 intermediate/*
+pretrained/output/*
+**/predictor_input_full.csv

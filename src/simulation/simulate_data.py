@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pandas as pd
 from src.data_loading.load_model_input import load_model_input_full
-from src.model_artifacts import build_model_artifact_config
+from src.model_artifacts import build_model_artifact_config, get_model_output_base
 from src.simulation.gravity.load_models import discover_age_group_models, load_all_models
 from src.simulation.gravity.simulate import simulate_data_with_gravity
 import subprocess
@@ -65,7 +65,8 @@ gravity_predictions = {}
 xgboost_predictions = {}
 catboost_predictions = {}
 
-base_path = project_root / "models" / "output" / "gravity_output" / GRAVITY_MODEL / GRAVITY_FIT_YEAR
+model_output_base = project_root / get_model_output_base()
+base_path = model_output_base / "gravity_output" / GRAVITY_MODEL / GRAVITY_FIT_YEAR
 model_paths = discover_age_group_models(base_path)
 
 gravity_models = load_all_models(model_paths)

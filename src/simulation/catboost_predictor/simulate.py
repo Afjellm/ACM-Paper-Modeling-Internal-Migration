@@ -5,11 +5,12 @@ import pandas as pd
 import argparse
 
 from src.data_loading.col_normalize import norm_count_cols
+from src.model_artifacts import get_model_output_base
 
 
 def simulate_data_with_catboost(df, model_name, fit_year, ground_truth_column, area_code, year, full_output_path):
     project_root = Path(__file__).resolve().parents[3]
-    base_path = project_root / "models" / "output"
+    base_path = project_root / get_model_output_base()
 
 
     age_groups = df["age_group"].unique()

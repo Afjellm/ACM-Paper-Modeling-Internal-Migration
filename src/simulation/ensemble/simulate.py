@@ -6,12 +6,13 @@ import argparse
 from autogluon.tabular import TabularPredictor
 
 from src.data_loading.col_normalize import norm_count_cols
+from src.model_artifacts import get_model_output_base
 
 os.environ["AUTOGluon_Allow_Model_Move"] = "True"
 
 def simulate_data_with_ensemble(df, model_name, fit_year, ground_truth_column, area_code):
     project_root = Path(__file__).resolve().parents[3]
-    base_path = project_root / "models" / "output" / "autogluon_output"
+    base_path = project_root / get_model_output_base() / "autogluon_output"
 
     path = Path(f"{base_path}/{model_name}/{fit_year}/model").resolve()
     predictor = TabularPredictor.load(str(path))

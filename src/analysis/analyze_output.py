@@ -24,6 +24,7 @@ def parse_args() -> argparse.Namespace:
         description="Analyze the configured XGBoost, CatBoost, AutoGluon, and Gravity outputs."
     )
     parser.add_argument(
+
         "--output",
         default="./model_comparison_analysis.md",
         help="Markdown output path for the comparison report.",
@@ -47,6 +48,7 @@ def read_prediction_csv(csv_path: Path) -> pd.DataFrame:
 
 
 def load_raw_predictions(model_dir: Path) -> pd.DataFrame:
+    print(f"running prediction analysis on folder {model_dir}")
     frames: list[pd.DataFrame] = []
     for csv_path in model_dir.rglob("full_results.csv"):
         rel_parts = csv_path.relative_to(model_dir).parts
@@ -70,6 +72,7 @@ def load_raw_predictions(model_dir: Path) -> pd.DataFrame:
             )
 
         if {"amount", "predicted", "area_code_origin", "area_code_target", "age_group"}.issubset(frame.columns):
+            frame = frame.loc[frame["area_code_origin"] != frame["area_code_target"]].copy()
             frame["predicted"] = frame["predicted"].round()
             frames.append(
                 frame[
