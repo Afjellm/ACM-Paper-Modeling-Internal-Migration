@@ -27,7 +27,7 @@ paper.
 
 - [`data/`](./data) contains the yearly input data used by the models. The dataset documentation lives in [
   `data/Readme.md`](./data/Readme.md).
-- [`run/`](./run) contains the entry-point scripts for Windows (`.bat`) and Linux (`.sh`).
+- [`run_training/`](./run_training) contains the entry-point scripts for Windows (`.bat`) and Linux (`.sh`) for model training.
 - [`src/automl/`](./src/automl) contains the AutoGluon training code.
 - [`src/constrained_xgboost/`](./src/constrained_xgboost) contains the constrained XGBoost training code.
 - [`src/constrained_catboost/`](./src/constrained_catboost) contains the constrained CatBoost training code.
@@ -82,14 +82,14 @@ uv python install
 
 ## How to run
 
-All runner scripts live in [`run/`](./run). They do two things for you:
+All runner scripts live in [`run_training/`](./run). They do two things for you:
 
 1. call `uv sync` in the corresponding module directory
 2. run the correct Python entry point with the repository root on `PYTHONPATH`
 
-### Step 1: Configure `run/settings.env`
+### Step 1: Configure `run_training/settings.env`
 
-Before running the training, analysis, or simulation scripts, review [`run/settings.env`](./run/settings.env):
+Before running the training, analysis, or simulation scripts, review [`run_training/settings.env`](./run_training/settings.env):
 
 For fast execution to simply run the models end to end the following settings can be used:
 
@@ -116,32 +116,32 @@ TIME_LIMIT=14400
 
 ### Step 2: Run the scripts
 
-From the repository root, use the launchers in [`run/`](./run).
+From the repository root, use the launchers in [`run_training/`](./run_training).
 
 The scripts ``run_analysis`` and ``run_simulate_data`` are only runnable after all 4 model outputs have been generated.
-They also read [`run/settings.env`](./run/settings.env), so the configured `ROWS_PER_AGE_GROUP` must match the training
+They also read [`run_training/settings.env`](./run_training/settings.env), so the configured `ROWS_PER_AGE_GROUP` must match the training
 run whose artifacts you want to analyze or simulate.
 
 #### Windows
 
 ```powershell
-.\run\run_automl.bat
-.\run\run_constrained_xgboost.bat
-.\run\run_constrained_catboost.bat
-.\run\run_gravity.bat
-.\run\run_analysis.bat
-.\run\run_simulate_data.bat
+.\run_training\run_automl.bat
+.\run_training\run_constrained_xgboost.bat
+.\run_training\run_constrained_catboost.bat
+.\run_training\run_gravity.bat
+.\run_training\run_analysis.bat
+.\run_training\run_simulate_data.bat
 ```
 
 #### Linux
 
 ```bash
-./run/run_automl.sh
-./run/run_constrained_xgboost.sh
-./run/run_constrained_catboost.sh
-./run/run_gravity.sh
-./run/run_analysis.sh
-./run/run_simulate_data.sh
+./run_training/run_automl.sh
+./run_training/run_constrained_xgboost.sh
+./run_training/run_constrained_catboost.sh
+./run_training/run_gravity.sh
+./run_training/run_analysis.sh
+./run_training/run_simulate_data.sh
 ```
 
 ## I want to reproduce the paper results
